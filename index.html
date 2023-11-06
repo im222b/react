@@ -8,20 +8,49 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
-    const root = document.getElementById("root");
     function App() {
-        const [counter, setCounter] = React.useState(0);
-        const onClick = () => {
-            //setCounter(counter +1);  안정적이지 못함 
-            setCounter((current) => current + 1);   //안정적임
+        const [amount, setAmount] = React.useState(0);
+        const [inverted, setInverted] = React.useState(false);
+        const onChange = (event) => {
+            setAmount(event.target.value);
+        };
+        const reset = () => setAmount(0);
+        const OnInverted = () => {
+            reset();
+            setInverted((current) => !current);
         };
         return (
             <div>
-                <h3>Total clicks : {counter} </h3>
-                <button onClick={onClick}>click Me</button>
+                <h1> 변환기 </h1>
+                <div>
+                    <label htmlfor="minutes">Minutes </label>
+                    <input
+                        value={inverted ? amount * 60 : amount}
+                        id="amount"
+                        placeholder="Minutes"
+                        type="numder"
+                        onChange={onChange}
+                        disabled={inverted}
+                    />
+                </div>
+
+                <div>
+                    <label htmlfor="hours">Hours </label>
+                    <input
+                        value={inverted ? amount : Math.round(amount / 60)}
+                        id="hours"
+                        placeholder="Hours"
+                        type="numder"
+                        onChange={onChange}
+                        disabled={!inverted}
+                    />
+                </div>
+                <button onClick={reset}>초기화</button>
+                <button onClick={OnInverted}>{inverted ? "시간을 분으로 변환" : "분을 시간으로 변환"}</button>
             </div>
         );
     }
+    const root = document.getElementById("root");
     ReactDOM.render(<App />, root);
 </script>
 
